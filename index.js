@@ -63,4 +63,8 @@ server.delete("/", (req, res) => {
 //O método PUT substitui todas as atuais representações do recurso de destino pela carga de dados da requisição; 
 //O método DELETE remove um recurso específico;
 
-
+//Como identificar um recurso
+//aqui usamos o "/user" para acessar um metodo especifico 
+server.get("/user", (req, res) => {
+    res.send("Hello World!! user")
+} )
