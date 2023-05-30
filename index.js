@@ -79,20 +79,41 @@ server.get("/produtos/:id", (req, res) => {  //para definir uma rota dinamica, U
     })
 })
 
-//Aqui vamos fazer a criação do recurso de POST = cadastrar um produto novo
-
+//Aqui vamos fazer a criação do recurso de POST = cadastrar um produto novo;
 server.post("/produtos", (req, res) => {
-    console.log(req.body)//pega a requisição feita no metodo POST no INSOMNIA, e mostra no terminal.
-    //para inserir a requisição feita no INSOMNIA para dentro do ARRAY de produtos usa-se da segunte forma
-    const novoProduto = { //Aqui foi feita uma vareavel para armazenar o valor e para deixar mais organizado
-        id: produtos.length + 1, // essa linha de codigo faz com que o pegue o ultimo id do array e incremente +1
-        nome: req.body.nome, //faz a requisição do valor do nome que é inserido no insomnia
+    console.log(req.body)//pega a requisição feita no metodo POST no INSOMNIA, e mostra no terminal.;
+    //para inserir a requisição feita no INSOMNIA para dentro do ARRAY de produtos usa-se da segunte forma;
+    const novoProduto = { //Aqui foi feita uma vareavel para armazenar o valor e para deixar mais organizado;
+        id: produtos.length + 1, // essa linha de codigo faz com que o pegue o ultimo id do array e incremente +1;
+        nome: req.body.nome, //faz a requisição do valor do nome que é inserido no insomnia;
         valor: req.body.valor//faz a requisição do valor que é inserido no campo valor no insomina || se tiver que fazer a conversao do valor de STRIN para NUMERO, tem que se fazer da segunte forma => valor: Number(req.body.valor)
     }
-    produtos.push( novoProduto ) // aqui faz o retorno da vareavel que foi declarada acima, trazendo todas as informaçoes;
+    produtos.push( novoProduto ) // aqui faz o retorno da vareavel que foi declarada acima, trazendo todas as informaçoes; || usamos o PUSH para enviar
         
     res.json({
-        produto: novoProduto //mensagem de retorno, caso de certo a requisição
+        produto: novoProduto //mensagem de retorno, caso de certo a requisição;
     })
 })
 
+//Aqui vamos fazer o metodo PUT substitui todas as atuais representações do recurso de destino pela carga de dados da requisição; 
+//Aqui adicionamos o /:id após o parametro /produtos, ex server.put("/produtos/:id", (req, res) => {}, fazemos isso para que possamos alterar(atualizar) o conteudo que pertence ao id
+server.put("/produtos/:id", (req, res) => {
+    const idDeParametro = Number(req.params.id); //Aqui é realizada uma requisição atraves de uma vareavel onde buscamos pelo parametro ID ||Se tiver que fazer uma conversao de string para numero usar esse comando => const idDeParametro = Number(req.params.id);
+    
+    //Aqui foi criada uma constante temporaria chamada produto, que ira procurar o mesmo ID que foi passado como parametro no server.put("/produtos/:id"
+    const produto = produtos.find((produto) => {
+        return produto.id == idDeParametro //aqui faz a comparação de valores do ID;
+    })
+    //aqui vamos tratrar de um erro, caso ocorra a tentativa de fazer um put atraves de um id que NÃO EXISTA, podemos tratar desta forma;
+    if(!produto){
+        res.status(404).send("Produto não cadastrado");//o status é uma resposta que ira voltar para o usuario, neste caso estamos configurando um status() de erro (404) || no .send() eu posso passar uma mensagem por exemplo de .send("Produto não cadastrado")
+        //res.status(404).json({mensagem:"Produto não cadastrado"}) <= esse exemplo que pode-se devolver em formato de .json
+        return; //sempre precisa devolver uma resposta
+    }
+
+    produto.nome = req.body.nome; //Aqui faz a atualização do nome que foi inserido no insomnia;
+    produto.valor = req.body.valor; //aqui faz a atualização do valor que foi insrido no insomnia;
+    res.json({
+        produto //mensagem de retorno do produto com os valores atualizado
+    })
+})
