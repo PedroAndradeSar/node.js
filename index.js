@@ -50,12 +50,14 @@ const produtos = [
 //criação de um get utilizando um .json
 server.get("/produtos", (req, res) => {
     //para fazer um filtro , podemos usar o .query, para isso precisamos definir uma vareavel que neste caso usamos a vareavel chamada moreThan, ela pode ter qualquer nome;
-    const moreThan = Number(req.query.more_than);  //moreThan  em ingles significa "maior que"| agora para se acessar o filtro, devemos utilizar req.query.more_than, o nome na pesquisa tem que ser o mesmo || isso Number(req.query.more_than)faz a conversao de string para numero
+    //const moreThan = req.query.more_than ? Number(req.query.more_than) : 0;  //moreThan  em ingles significa "maior que"| agora para se acessar o filtro, devemos utilizar req.query.more_than, o nome na pesquisa tem que ser o mesmo || a função Number(req.query.more_than)faz a conversao de string para numero
+    const moreThan = req.query.more_than ? Number(req.query.more_than) : 0; 
+    //caso o valor seja 0, eu posso fazer um ternario para satisfazer meu filter, ou seja, caso não satistaça a minha solicitação devo fazer com que mostre todos que seja maior que 0
     res.json({
         // aqui por boa pratica se deixa o mesmo nome...
         ///*essa vareavel pode ser qualquer outro nome, neste caso usamos o => produtos: produtos <=aqui ira devolver um array de produtos, como por exemplo, nome, qtd, etc
         produtos: produtos.filter((produto) => { //temos uma função chamada .filter() que tem como função fazer um filtro, ele cria um novo array com os valores que são passados dentro da condição, ou seja, dentro dos ( ), dentro da condição ela recebe um callback que receberá o meu PRODUTO junto com uma arrow function
-            return moreThan < produto.price  //aqui faz a seguinte funçao de manter todos os preços que forem maior que a queryString ira passar por aqui... 
+            return produto.valor > moreThan  //aqui faz a seguinte funçao de manter todos os preços que forem maior que a queryString ira passar por aqui... 
 
         }) 
      })
@@ -64,7 +66,7 @@ server.get("/produtos", (req, res) => {
 //criação de uma rota com para um produto especifico, pode-ser esse por ID por exemplo
 server.get("/produtos/:id", (req, res) => {  //para definir uma rota dinamica, USAMOS APOS o / : e a vareavel que queremos buscar, nesse exemplo produtos/:id
     //usamos essa constante para armazenar e guardar o produto que ira corresponder ao id, se caso ele estiver no array;
-    //para pegar o id que esta na vareavel podemos acessar atraves da requisição (req), a função params = parametro, colocamos ela dentro de uma vaeravel para reaproveitamento, neste caso USAMOS A VEREAVEL idDeParametro
+    //para pegar o id que esta na vareavel podemos acessar amore_than?traves da requisição (req), a função params = parametro, colocamos ela dentro de uma vaeravel para reaproveitamento, neste caso USAMOS A VEREAVEL idDeParametro
     const idDeParametro = Number(req.params.id); //Aqui usamos a função NUMBER() para fazer a conversao de string para numero
     const produto = produtos.find((produto) => { //o find ira achar um elemento dentro do meu array, e procurar quem tera o id 1, ele faz essa comparação atraves de uma função dentro do find exemplo: .find( () => { }). dentro da função que vai no find ele recebe um ELEMENTO, que ne/* s */
         return produto.id == idDeParametro;  // aqui neste caso se ele retornar TRUE ele ira fazer a caputura desse objeto que corresponde ao ID 1
@@ -73,4 +75,6 @@ server.get("/produtos/:id", (req, res) => {  //para definir uma rota dinamica, U
         produto //aqui ele me retorna o meu array pesquisado pelo id
     })
 })
+
+//Aqui vamos fazer a criação do recurso de POST = cadastrar um produto novo
 
