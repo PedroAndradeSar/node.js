@@ -32,7 +32,7 @@ server.get("/health", (req, res) => {
 //crud (operações principais que são usadas POST, PULL, GET, DELETE)
 
 //criação do meu array de produtos em forma de objetos que ira simular um banco de dados em memoria
-const produtos = [
+let produtos = [
     {
         id: 1,
         nome: "ps4",
@@ -116,4 +116,13 @@ server.put("/produtos/:id", (req, res) => {
     res.json({
         produto //mensagem de retorno do produto com os valores atualizado
     })
+})
+
+//Aqui vamos fazer o metodo Delete, que literalmente deleta com base no id solicitado 
+server.delete("/produtos/:id",(req, res) => {
+    const idDeParametro = Number(req.params.id);//Aqui é realizada uma requisição atraves de uma vareavel onde buscamos pelo parametro ID ||Se tiver que fazer uma conversao de string para numero usar esse comando => const idDeParametro = Number(req.params.id);
+    produtos = produtos.filter((produto) => {//aqui atraves do filter ele ira criar um novo array 
+        return produto.id != idDeParametro; //aqui ele ira retornar tudo que estiver diferente 
+    })
+    res.status(204).send("Produto deletado com sucesso");// aqui é a resposta do usuario
 })
