@@ -3,10 +3,10 @@ const express = require("express");
 
 //aqui faz a substituição do server por router
 const router = express.Router();
-express
+
 //crud (operações principais que são usadas POST, PULL, GET, DELETE)
 
-//criação do meu array de produtos em forma de objetos que ira simular um banco de dados em memoria
+//criação do meu array de produtosexpress em forma de objetos que ira simular um banco de dados em memoria
 let produtos = [
     {
         id: 1,
