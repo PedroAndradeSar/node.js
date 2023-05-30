@@ -15,56 +15,62 @@ server.listen(port, () => {
     console.log(`Servidor rodando na porta ${port}`);// mensagem que estará dentro da requisição como callback atravez do terminal
 });
 
-//esses metodos deverá ser testado direto no insomnia;
+//Esse é o metodo mais proximo do cotidiano;
 
-//aqui ira retornar a mensagem toda vez que for solicitado algo na porta 8080 quando se tentar acessar o recurso, ou seja
-//toda vez que for acessado o localhost:8080/ executa essa função que ele ira retornar essa mensagem
-//O método GET solicita a representação de um recurso específico. Requisições utilizando o método GET devem retornar apenas dados.
-server.get("/", (req, res) => {
-    res.send("Hello World") //mensagem que estará rodando dentro da requisição como callback quando acessar o localhost:8080, para isso usamos o RES.SEND("MENSAGEM QUALQUER")
-}); //o get sempre ira buscar uma pagina da internet
+//Essa rota criada é comum, e é usada para verificar se o servidor está rodando;    
+server.get("/health", (req, res) => {
+    //res.send("Servidor rodando")  | essa é a forma de mandar em um formato de TEXTO
+   
+    res.json({ //quando se substitui  o .SEND para um .JSON tem que se abrir um objeto atraves do {}, feito isso colocamos uma mensagem dentro atraves de um status;
+        status: "ok ,  Running" //o formato .json se torma mais performatico e mais facil de manipula-lo
+    })
+});
 
-//após criar o metodo get, pode-se criar o metodo post
-//sempre que houver um metodo post, dentro do recurso "/" ela ira retornar essa mensagem, 
-//sempre dentro da função sempre retornaremos um parametro, sendo ele (res = resposta || req = requisição), ou seja, neste caso estamos retornando uma RESPOSTA do metodo POST
-// O método POST é utilizado para submeter uma entidade a um recurso específico, frequentemente causando uma mudança no estado do recurso ou efeitos colaterais no servidor.
-server.post("/", (req, res) => {
-    res.send("Hello World Post") //retorno da mensagem que esta rodando dentro da requisição POST, ela volta como uma callback 
-}) 
+//crud (operações principais que são usadas POST, PULL, GET, DELETE)
 
-//aqui será o metodo put
-//sempre que houver um metodo put, dentro do recurso "/" ela ira retornar essa mensagem,
-//O método PUT substitui todas as atuais representações do recurso de destino pela carga de dados da requisição; 
-server.put("/", (req, res) => {
-    res.send("Hello World Put") //retorno da mensagem que esta rodando dentro da requisição PUT, ela volta como uma callback
+//criação do meu array de produtos em forma de objetos que ira simular um banco de dados
+const produtos = [
+    {
+        id: 1,
+        nome: "ps4",
+        valor: 2500
+    },
+    {
+        id: 2,
+        nome: "xbox",
+        valor: 1500
+    },
+    {
+        id: 3,
+        nome: "nintendo",
+        valor: 1000
+    }
+]
+
+//criação de um get utilizando um .json
+server.get("/produtos", (req, res) => {
+    //para fazer um filtro , podemos usar o .query, para isso precisamos definir uma vareavel que neste caso usamos a vareavel chamada moreThan, ela pode ter qualquer nome;
+    const moreThan = Number(req.query.more_than);  //moreThan  em ingles significa "maior que"| agora para se acessar o filtro, devemos utilizar req.query.more_than, o nome na pesquisa tem que ser o mesmo || isso Number(req.query.more_than)faz a conversao de string para numero
+    res.json({
+        // aqui por boa pratica se deixa o mesmo nome...
+        ///*essa vareavel pode ser qualquer outro nome, neste caso usamos o => produtos: produtos <=aqui ira devolver um array de produtos, como por exemplo, nome, qtd, etc
+        produtos: produtos.filter((produto) => { //temos uma função chamada .filter() que tem como função fazer um filtro, ele cria um novo array com os valores que são passados dentro da condição, ou seja, dentro dos ( ), dentro da condição ela recebe um callback que receberá o meu PRODUTO junto com uma arrow function
+            return moreThan < produto.price  //aqui faz a seguinte funçao de manter todos os preços que forem maior que a queryString ira passar por aqui... 
+
+        }) 
+     })
 })
 
-//aqui irá ser feito um metodo delete;
-//O método DELETE remove um recurso específico. 
-server.delete("/", (req, res) => {
-    res.send("Hello World Delete")//retorno da mensagem que esta rodando dentro da requisição PUT, ela volta como uma callback
+//criação de uma rota com para um produto especifico, pode-ser esse por ID por exemplo
+server.get("/produtos/:id", (req, res) => {  //para definir uma rota dinamica, USAMOS APOS o / : e a vareavel que queremos buscar, nesse exemplo produtos/:id
+    //usamos essa constante para armazenar e guardar o produto que ira corresponder ao id, se caso ele estiver no array;
+    //para pegar o id que esta na vareavel podemos acessar atraves da requisição (req), a função params = parametro, colocamos ela dentro de uma vaeravel para reaproveitamento, neste caso USAMOS A VEREAVEL idDeParametro
+    const idDeParametro = Number(req.params.id); //Aqui usamos a função NUMBER() para fazer a conversao de string para numero
+    const produto = produtos.find((produto) => { //o find ira achar um elemento dentro do meu array, e procurar quem tera o id 1, ele faz essa comparação atraves de uma função dentro do find exemplo: .find( () => { }). dentro da função que vai no find ele recebe um ELEMENTO, que ne/* s */
+        return produto.id == idDeParametro;  // aqui neste caso se ele retornar TRUE ele ira fazer a caputura desse objeto que corresponde ao ID 1
+    }) 
+    res.json({
+        produto //aqui ele me retorna o meu array pesquisado pelo id
+    })
 })
 
-
-//o SERVER é uma vareavel;
-//o GET, POST, DELETE, PULL é um metodo;
-//o ("/") é um recurso, que pode ser mais especifico, como por exemplo: ("/user");
-//o REQ é uma requisição que acontece quando chama-se o recurso;
-//o RES é uma resposta do que aconrece quando chama-se o recurso;
-//ficando conforme o exemplo: 
-        // server.delete("/", (req, res) => {       |vareavelDefinida.Metodo("/recurso", (req, res) =>{
-        //     res.send("Hello World Delete")       |     res.send("mensagem")
-        // })                                       | })
-
-//Significado de cada metodo 
-//SEMPRE QUE FOR DEFINIR UMA ROTA, USAR A VAREAVEL QUE DIFINIRMOS, E ALGUM DOS METODOS ABAIXO
-//O método GET solicita a representação de um recurso específico. Requisições utilizando o método GET devem retornar apenas dados;
-// O método POST é utilizado para submeter uma entidade a um recurso específico, frequentemente causando uma mudança no estado do recurso ou efeitos colaterais no servidor;
-//O método PUT substitui todas as atuais representações do recurso de destino pela carga de dados da requisição; 
-//O método DELETE remove um recurso específico;
-
-//Como identificar um recurso
-//aqui usamos o "/user" para acessar um metodo especifico 
-server.get("/user", (req, res) => {
-    res.send("Hello World!! user")
-} )

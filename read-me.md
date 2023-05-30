@@ -17,3 +17,5 @@
 *apos instalar o nodemon, devemos ir no arquivo **packeage.json**  na parte de **"scripts"** e criar os seguintes comandos:*
 *"start": "node index.js"*   &&
 *"dev": "nodemon index.js"*  <esse modo dev ira atualizar se salvar-mos no vscode e apertar f5 no navegador com o localhost>
+*para fazer o servidor startar deve-se usar:*
+**npm run dev**
