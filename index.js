@@ -54,6 +54,7 @@ let produtos = [
 server.get("/produtos", (req, res) => {
     //para fazer um filtro , podemos usar o .query, para isso precisamos definir uma vareavel que neste caso usamos a vareavel chamada moreThan, ela pode ter qualquer nome;
     //const moreThan = req.query.more_than ? Number(req.query.more_than) : 0;  //moreThan  em ingles significa "maior que"| agora para se acessar o filtro, devemos utilizar req.query.more_than, o nome na pesquisa tem que ser o mesmo || a função Number(req.query.more_than)faz a conversao de string para numero
+    //essa funçao deixa tudo opcional depois da interrogação exemplo http://localhost:8080/produtos?more_than=1499 => (?more_than=1499 )=> pode ser opcional ou utilizado como filtro
     const moreThan = req.query.more_than ? Number(req.query.more_than) : 0; 
     //caso o valor seja 0, eu posso fazer um ternario para satisfazer meu filter, ou seja, caso não satistaça a minha solicitação devo fazer com que mostre todos que seja maior que 0
     res.json({
