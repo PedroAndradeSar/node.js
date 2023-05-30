@@ -19,3 +19,6 @@
 *"dev": "nodemon index.js"*  <esse modo dev ira atualizar se salvar-mos no vscode e apertar f5 no navegador com o localhost>
 *para fazer o servidor startar deve-se usar:*
 **npm run dev**
+
+********
+*agora criar o arquivo routes.js e inserir o GET, POST, PUT, DELETE*
