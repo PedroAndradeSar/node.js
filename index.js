@@ -31,7 +31,7 @@ server.get("/health", (req, res) => {
 
 //crud (operações principais que são usadas POST, PULL, GET, DELETE)
 
-//criação do meu array de produtos em forma de objetos que ira simular um banco de dados
+//criação do meu array de produtos em forma de objetos que ira simular um banco de dados em memoria
 const produtos = [
     {
         id: 1,
@@ -84,13 +84,15 @@ server.get("/produtos/:id", (req, res) => {  //para definir uma rota dinamica, U
 server.post("/produtos", (req, res) => {
     console.log(req.body)//pega a requisição feita no metodo POST no INSOMNIA, e mostra no terminal.
     //para inserir a requisição feita no INSOMNIA para dentro do ARRAY de produtos usa-se da segunte forma
-    produtos.push({
+    const novoProduto = { //Aqui foi feita uma vareavel para armazenar o valor e para deixar mais organizado
         id: produtos.length + 1, // essa linha de codigo faz com que o pegue o ultimo id do array e incremente +1
         nome: req.body.nome, //faz a requisição do valor do nome que é inserido no insomnia
         valor: req.body.valor//faz a requisição do valor que é inserido no campo valor no insomina || se tiver que fazer a conversao do valor de STRIN para NUMERO, tem que se fazer da segunte forma => valor: Number(req.body.valor)
-    })
+    }
+    produtos.push( novoProduto ) // aqui faz o retorno da vareavel que foi declarada acima, trazendo todas as informaçoes;
+        
     res.json({
-        teste:"ok" //mensagem de retorno, caso de certo a requisição
+        produto: novoProduto //mensagem de retorno, caso de certo a requisição
     })
 })
 
