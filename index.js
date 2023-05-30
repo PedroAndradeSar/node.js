@@ -6,6 +6,9 @@ const express = require("express");
 //o server seria o servidor;
 const server = express();
 
+//Aqui faz a conversao de json para uma sintaxe do javascript
+server.use(express.json())//fala pra o servidor que as requisições são do formato .json, ou seja, ele ira saber processar o objeto para ọ javascript poder acessar
+
 //Aqui iremos criar uma vareavel que iremos utilizar como uma porta para o servidor;
 const port = 8080;
 
@@ -77,4 +80,17 @@ server.get("/produtos/:id", (req, res) => {  //para definir uma rota dinamica, U
 })
 
 //Aqui vamos fazer a criação do recurso de POST = cadastrar um produto novo
+
+server.post("/produtos", (req, res) => {
+    console.log(req.body)//pega a requisição feita no metodo POST no INSOMNIA, e mostra no terminal.
+    //para inserir a requisição feita no INSOMNIA para dentro do ARRAY de produtos usa-se da segunte forma
+    produtos.push({
+        id: produtos.length + 1, // essa linha de codigo faz com que o pegue o ultimo id do array e incremente +1
+        nome: req.body.nome, //faz a requisição do valor do nome que é inserido no insomnia
+        valor: req.body.valor//faz a requisição do valor que é inserido no campo valor no insomina || se tiver que fazer a conversao do valor de STRIN para NUMERO, tem que se fazer da segunte forma => valor: Number(req.body.valor)
+    })
+    res.json({
+        teste:"ok" //mensagem de retorno, caso de certo a requisição
+    })
+})
 
